@@ -6,7 +6,11 @@ import beelogo from '/bees.png'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [showMessage, setShowMessage] = useState(false)
+
+  const handleToggle = () => {
+    setShowMessage((prev) => !prev)
+  }
 
   return (
     <>
@@ -22,16 +26,16 @@ function App() {
         </a>
       </div>
       <h1>Vite + React + Bee</h1>
+      
+      {/* Toggle Message Button and Message */}
       <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <Button onClick={handleToggle}>Toggle Message</Button>
+        {showMessage && (
+          <p>Hello, welcome to React!</p>
+        )}
       </div>
       <p className="read-the-docs">
-        "Do not react, learn to respond."
+        "Do not React, learn to Respond."
       </p>
     </>
   )
