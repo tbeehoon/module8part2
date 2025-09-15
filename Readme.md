@@ -6,7 +6,7 @@ This readme shows:
 
 1. Task1 - Handling Events in React
 
-2. Task2 - **Set Up a Basic React Environment**
+2. Task2 - State Management using React Hooks
 
 3. Task3 - **Create and Render Functional Components**
 
@@ -105,43 +105,189 @@ The following is the resulting browser screen capture:
 
 ---
 
-### 4. Task 4 - **Use JSX for Structuring Components ** 
+### 2. State Management using React Hooks
 
-Required task details: 
+> [!NOTE]
+>
+> Requirements: 
+>
+> a) Build a component called ColorChanger. This component should have a text input where users can enter a colour name (e.g., “blue”). 
+>
+> b) The component should display a box that changes colour based on the input. 
+>
+> c) As the user types into the input, the box should automatically update to the new colour if it’s a valid colour name. 
 
-a) Create a component that renders a list of items (using an unordered list) and a heading (e.g., "My To-Do List"). 
+Two files are modified to complete the task:
 
-b) The component should display at least three items in the list using JSX. 
+**2.1 App.jsx**
 
-The 4 files are modified to complete the task:
+App.jsx is setup to "frame" the app, and import in ColorChange as a child component, 
 
-a. **GreetingComponent**: using the same  file (src/GreetingComponent.jsx) that returns a simple JSX element with slight modification. 
+a. Import custom **ColorChanger**
 
-b. **TodoList**: create a new file (src/TodoList.jsx) that contains the TodoList component and exports it as default. Also, use React-Bootstrap components for layout.
+```
+import ColorChanger from './ColorChanger'
+```
 
-![](./public/Task4-todolist.jpg)
+b. Render ColorChanger Component inside the styled card.
 
-c. **App.jsx**: Imports and renders both GreetingComponent and TodoList. 
+```
+{/* ColorChanger Component */}
+<div className="card" style={{ marginTop: 0 }}>
+	<ColorChanger />
+</div>
+```
 
-![](./public/Task4-app.jpg)
 
-d. **main.jsx**: renders only the App component as the root of your application.
 
-This makes App the main entry point for the UI, and all other components are organized and rendered through it. 
+**2.2 ColorChanger.jsx**
 
-Also the import of Bootstrap CSS is in src/main.jsx at the very top. This makes Bootstrap styles available globally in the app.
+This the component for the interactive color box. 
 
-![](./public/Task4-main.jpg)
+a. Start with State Management. The **color** variable stores the user input, initiated as empty (' ').
 
-e. **index.html**: Not much change the in this file, only slight change to update the title and the favicon 
+```
+const [color, setColor] = useState('')
+```
 
-![](./public/Task4-index.jpg)
 
-f. run the command "**npm run dev**" and check output. 
 
-![](./public/Task4-browser.jpg)
+b. The color validation is done with variable **isValidColor**.  It creates a temporary DOM style object and tries to set its `color`. If the browser recognizes the input (like `"red"`, `"#00ff00"`, or `"rgb(0,0,255)"`), it will be set. If it’s invalid, it will remain empty.
 
-g. Final git push for todolist app is pushed to the following github repo: 
+```
+const isValidColor = (col) => {
+  const s = new Option().style
+  s.color = col
+  return s.color !== ''
+}
+```
+
+
+
+c. The color box is styled with the the following: 
+
+* The main box is **320×100px**.
+
+* Background is user’s chosen color if valid. A dull grey (`#eee`) if not.
+
+* Centered text with background transitions.
+
+  ```
+  const boxStyle = {
+    width: '320px',
+    height: '100px',
+    backgroundColor: isValidColor(color) ? color : '#eee',
+    border: '1px solid #ccc',
+    marginTop: '10px',
+    transition: 'background 0.3s',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#222',
+  }
+  ```
+
+
+
+d. Rendering Logic is defined in two steps:
+
+Step1 - User types a color name (like `"red"`) or a CSS color value. Updates the `color` state on change.
+
+```
+<input
+    id="color-input"
+    type="text"
+    value={color}
+    onChange={e => setColor(e.target.value)}
+    placeholder="e.g. blue, red, green"
+    style={{ marginLeft: '10px' }}
+/>
+```
+
+Step2 - If the color is valid and not empty, displays the color’s name inside the box. Otherwise shows the default message.
+
+```
+<div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+    <div style={boxStyle}>
+      {isValidColor(color) && color ? color : (
+        <> 
+            I am a boring box with no color. <br/> 
+            Please enter a color to make me colorful.
+        </>
+        )}
+    </div>
+</div>
+```
+
+
+
+The full code for ColorChanger.jsx is as follows:
+
+![image-20250915102156327](.\public\task2.jpg)
+
+```
+import { useState } from 'react'
+
+function ColorChanger() {
+  const [color, setColor] = useState('')
+
+  // Check if the color is valid by trying to set it on a dummy element
+  const isValidColor = (col) => {
+    const s = new Option().style
+    s.color = col
+    return s.color !== ''
+  }
+
+  const boxStyle = {
+    width: '320px',
+    height: '100px',
+    backgroundColor: isValidColor(color) ? color : '#eee',
+    border: '1px solid #ccc',
+    marginTop: '10px',
+    transition: 'background 0.3s',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#222',
+  }
+
+  return (
+    <div className="card">
+      <label htmlFor="color-input">Enter a color name:</label>
+      <input
+        id="color-input"
+        type="text"
+        value={color}
+        onChange={e => setColor(e.target.value)}
+        placeholder="e.g. blue, red, green"
+        style={{ marginLeft: '10px' }}
+      />
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
+        <div style={boxStyle}>
+          {isValidColor(color) && color ? color : (
+            <> 
+                I am a boring box with no color. <br/> 
+                Please enter a color to make me colorful.
+            </>
+            )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default ColorChanger
+```
+
+The resulting browser screen is shown below:
+
+![image-20250915102429236](.\public\task2-screen.jpg)
+
+
+
+## 4. Git Hub Repo 
+
+Final git push for todolist app is pushed to the following github repo: 
 
 https://github.com/tbeehoon/todo-app/tree/main
 
