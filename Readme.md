@@ -99,7 +99,7 @@ export default App
 
 The following is the resulting browser screen capture:
 
-![image-20250914224519487](.\public\task1-screen.jpg)
+![](./public/task1-screen.jpg)
 
 
 
@@ -223,7 +223,7 @@ Step2 - If the color is valid and not empty, displays the color’s name inside 
 
 The full code for ColorChanger.jsx is as follows:
 
-![image-20250915102156327](.\public\task2.jpg)
+![](./public/task2.jpg)
 
 ```
 import { useState } from 'react'
@@ -281,7 +281,7 @@ export default ColorChanger
 
 The resulting browser screen is shown below:
 
-![image-20250915102429236](.\public\task2-screen.jpg)
+![](./public/task2-screen.jpg)
 
 
 
