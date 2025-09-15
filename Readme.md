@@ -574,9 +574,7 @@ npm run dev
 
 ![](./public/setup3.jpg)
 
-The following is the default browser screen upon installation:
 
-![image-20250914210245909](./public/setup4.jpg)
 
 ### 5.4 Add Bootstrap to the React project (Optional)
 
