@@ -4,6 +4,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import beelogo from '/bees.png'
 import './App.css'
+import ColorChanger from './ColorChanger'
 
 function App() {
   const [showMessage, setShowMessage] = useState(false)
@@ -34,7 +35,11 @@ function App() {
           <p>Hello, welcome to React!</p>
         )}
       </div>
-      <p className="read-the-docs">
+      {/* ColorChanger Component */}
+      <div className="card" style={{ marginTop: 0 }}>
+        <ColorChanger />
+      </div>
+      <p className="footer">
         "Do not React, learn to Respond."
       </p>
     </>

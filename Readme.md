@@ -4,7 +4,7 @@ Compiled  by Tan Bee Hoon (contact: tbeehoon@gmail)
 
 This readme shows: 
 
-1. Task1 - Explain React Core Features and its advantages.
+1. Task1 - Handling Events in React
 
 2. Task2 - **Set Up a Basic React Environment**
 
@@ -16,144 +16,90 @@ This readme shows:
 
    
 
-## 1. Task1 - Explain React Core Features and its advantages
+## 1. Handling Events in React
 
-### 1.1 React Core Features
-
-The following is a brief explanation of React’s core features: component-based architecture, Virtual DOM, and unidirectional data flow
-
-#### 1.1.1 **Component-Based Architecture**
-
-- React applications are built using reusable, self-contained components.
-
-- component encapsulates its own structure, logic, and style, making code modular and easier to maintain.
-
-- Components can be nested, managed, and reused throughout the application.
-- Components accept **props** (inputs) and manage internal **state**, then compose together like Lego bricks to form whole pages.
-- This keeps concerns local and makes reuse easy.
-
-#### 1.1.2 **Virtual DOM**
-
-- React uses a Virtual DOM, which is a lightweight copy of the actual DOM.
-
-- When the state of an object changes, React updates the Virtual DOM first, then efficiently updates only the changed parts in the real DOM.
-- When state changes, React computes the minimal set of real DOM updates via a diff (“reconciliation”) and applies them efficiently, often batching multiple updates. 
-
-- This approach improves performance, especially in large and dynamic applications.
-
-#### 1.1.3**Unidirectional Data Flow**
-
-- Data in React flows in a single direction, from parent to child components via props.
-- State changes trigger re-renders that propagate downward.
-- This single direction makes data paths explicit and easier to trace. 
-
-- This makes the data flow predictable and easier to debug, as changes in the application state are managed in a controlled way.
-
-  
-
-### 1.2 Advantages
-
-These features collectively enable developers to build scalable, high-performance, and maintainable web applications.
-
-- Maintainability: The component-based structure allows developers to break down complex UIs into smaller, manageable pieces, making code easier to read, test, and maintain.
-
-- Performance: The Virtual DOM minimizes direct manipulation of the real DOM, resulting in faster updates and a smoother user experience.
-
-- Predictability: Unidirectional data flow ensures that data changes are predictable and traceable, reducing bugs and making applications easier to debug.
-
-- Reusability: Components can be reused across different parts of an application or even in different projects, speeding up development and ensuring consistency.
-
----
-
-
-
-## 2. Task 2 - Set Up a Basic React Environment
-
-Required task details: 
-
-a) Create an HTML file and include CDN links for React and ReactDOM. 
-
-b) Add a <div> with an id of "root" in the HTML body. 
-
-c) Write a simple React component inside a <script> tag and use ReactDOM.render() to render it to the page. 
-
-The codes for the above tasks:
-
-```
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>React CDN Example</title>
-  <!-- React and ReactDOM CDN links -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <!-- Babel for JSX support in the browser, just for this example task-->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body>
-  <!-- Root div for React -->
-  <div id="root"></div>
-  <!-- React code -->
-  <script type="text/babel">
-    function HelloWorld() {
-      return <h1>Hello, React from CDN!</h1>;
-    }
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<HelloWorld />);
-  </script>
-</body>
-</html>
-```
-
-Screen captures for the above code:
-
-![](./public/Task2-code.jpg)
-
-Screen captures for the above in browser:
-
-![](./public/Task2-screen.jpg)
-
-----
-
-
-
-## 3. Task 3 - Create and Render Functional Components
-
-Required task details: 
-
-a) Define a functional React component (e.g., GreetingComponent) that returns a simple JSX element. 
-
-b) Render the component using ReactDOM.render() to display it on the page.
-
-> [!IMPORTANT]
+> [!NOTE]
 >
-> Note: The local machine setup is using **React version 18**. Thus, not able to use **ReactDOM.render()**. Instead, **React version 18** and above with Vite, expect to use createRoot. Thus, part (b) of the task is modified slightly to use the supported **createRoot(...).render(...)**
+> Requirements:
+>
+> a) Create a simple component with a button labeled “Toggle Message.” 
+>
+> b) When the button is clicked, toggle a message on the screen that says “Hello, welcome to React!” This message should disappear when the button is clicked again.
 
 
 
-The 3 files are modified to complete the task:
+The file App.jsx is modified to complete the task:
 
-a. **GreetingComponent**: Created as a separate file (src/GreetingComponent.jsx) that returns a simple JSX element.  
+a. Created a `<Button onClick={handleToggle}>Toggle Message</Button>` inside component App
 
-![](./public/Task3-component.jpg)
+b. The button is labelled “Toggle Message”
 
-b. **main.jsx**: Imports and renders GreetingComponent instead of App. Uses **createRoot(...).render(...)** instead of **ReactDOM.render()**.
+c. Using a state variable `showMessage` (`useState(false)`) to keep track of whether the message should be visible
 
-![](./public/Task3-main.jpg)
+d. The `handleToggle` function flips the value of `showMessage` each time the button is clicked.
 
-c. **index.html:**  Matches the Vite template (no Babel or CDN scripts, add a root div and a module script for main.jsx).
+e. Conditionally render the message, which ensures the message appears when `showMessage` is true and disappears when it’s false.
 
-![](./public/Task3-index.jpg)
+```
+{showMessage && (
+  <p>Hello, welcome to React!</p>
+)}
+```
 
-d. run the command "**npm run dev**"
+The code for the full App.jsx is as follows:
 
-![](./public/Task3-command.jpg)
+![](./public/task1.jpg)
 
-e. check the browser 
+```
+import { useState } from 'react'
+import Button from 'react-bootstrap/Button'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import beelogo from '/bees.png'
+import './App.css'
 
-![](./public/Task3-browser.jpg)
+function App() {
+  const [showMessage, setShowMessage] = useState(false)
+
+  const handleToggle = () => {
+    setShowMessage((prev) => !prev)
+  }
+
+  return (
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+        <a href="https://tbeehoon.wordpress.com/" target="_blank">
+          <img src={beelogo} className="logo bee" alt="Bee logo" />
+        </a>
+      </div>
+      <h1>Vite + React + Bee</h1>
+      
+      {/* Toggle Message Button and Message */}
+      <div className="card">
+        <Button onClick={handleToggle}>Toggle Message</Button>
+        {showMessage && (
+          <p>Hello, welcome to React!</p>
+        )}
+      </div>
+      <p className="read-the-docs">
+        "Do not React, learn to Respond."
+      </p>
+    </>
+  )
+}
+
+export default App
+```
+
+The following is the resulting browser screen capture:
+
+![image-20250914224519487](.\public\task1-screen.jpg)
 
 
 
@@ -264,7 +210,9 @@ npm run dev
 
 ![](./public/setup3.jpg)
 
+The following is the default browser screen upon installation:
 
+![image-20250914210245909](./public/setup4.jpg)
 
 ### 5.4 Add Bootstrap to the React project (Optional)
 
@@ -349,14 +297,14 @@ git init
 git add .
 
 # Commit the files
-git commit -m "Initial commit: setup React + Vite project"
+git commit -m "Initial commit: setup project"
 ```
 
 To add to Github.
 
 ```
 # Add remote 
-git remote add origin https://github.com/username/my-app.git
+git remote add origin https://github.com/tbeehoon/module8part2.git
 
 # Push changes
 git branch -M main
