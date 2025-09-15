@@ -1,6 +1,6 @@
 # NVM, React and Vite
 
-Compiled  by Tan Bee Hoon (contact: tbeehoon@gmail)
+Compiled  by Tan Bee Hoon (contact: tbeehoon@gmail), dated 15 Sep 2025
 
 This readme shows: 
 
