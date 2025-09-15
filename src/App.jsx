@@ -5,6 +5,7 @@ import viteLogo from '/vite.svg'
 import beelogo from '/bees.png'
 import './App.css'
 import ColorChanger from './ColorChanger'
+import UserProfile from './UserProfile'
 
 function App() {
   const [showMessage, setShowMessage] = useState(false)
@@ -38,6 +39,10 @@ function App() {
       {/* ColorChanger Component */}
       <div className="card" style={{ marginTop: 0 }}>
         <ColorChanger />
+      </div>
+      {/* UserProfile Component */}
+      <div className="card" style={{ marginTop: 0 }}>
+        <UserProfile />
       </div>
       <p className="footer">
         "Do not React, learn to Respond."

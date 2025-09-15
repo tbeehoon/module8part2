@@ -8,15 +8,15 @@ This readme shows:
 
 2. Task2 - State Management using React Hooks
 
-3. Task3 - **Create and Render Functional Components**
+3. Task3 - Asynchronous Data Fetching with AJAX
 
-4. Task4 - **Use JSX for Structuring Components** 
+4. Reference - Github Repo 
 
 5. How to set up the environment for NVM, React and Vite.
 
    
 
-## 1. Handling Events in React
+## 1. Task1-Handling Events in React
 
 > [!NOTE]
 >
@@ -27,6 +27,8 @@ This readme shows:
 > b) When the button is clicked, toggle a message on the screen that says “Hello, welcome to React!” This message should disappear when the button is clicked again.
 
 
+
+### 1.1. Explanation
 
 The file App.jsx is modified to complete the task:
 
@@ -45,6 +47,10 @@ e. Conditionally render the message, which ensures the message appears when `sho
   <p>Hello, welcome to React!</p>
 )}
 ```
+
+
+
+### 1.2 Code for App.jsx
 
 The code for the full App.jsx is as follows:
 
@@ -97,6 +103,16 @@ function App() {
 export default App
 ```
 
+
+
+### 1.3 Output 
+
+Run the code:
+
+```
+npm run dev
+```
+
 The following is the resulting browser screen capture:
 
 ![](./public/task1-screen.jpg)
@@ -105,7 +121,7 @@ The following is the resulting browser screen capture:
 
 ---
 
-### 2. State Management using React Hooks
+## 2. Task2-State Management using React Hooks
 
 > [!NOTE]
 >
@@ -119,7 +135,9 @@ The following is the resulting browser screen capture:
 
 Two files are modified to complete the task:
 
-**2.1 App.jsx**
+### 2.1 Explanation 
+
+#### **2.1.1 `App.jsx` – The Main Application Component**
 
 App.jsx is setup to "frame" the app, and import in ColorChange as a child component, 
 
@@ -140,7 +158,7 @@ b. Render ColorChanger Component inside the styled card.
 
 
 
-**2.2 ColorChanger.jsx**
+#### **2.1.2 ColorChanger.jsx** - Interactive Color Nox 
 
 This the component for the interactive color box. 
 
@@ -221,6 +239,8 @@ Step2 - If the color is valid and not empty, displays the color’s name inside 
 
 
 
+### 2.2 Code for ColorChanger.jsx
+
 The full code for ColorChanger.jsx is as follows:
 
 ![](./public/task2.jpg)
@@ -279,17 +299,215 @@ function ColorChanger() {
 export default ColorChanger
 ```
 
+
+
+### 2.3 Output
+
+Run the code:
+
+```
+npm run dev
+```
+
 The resulting browser screen is shown below:
 
 ![](./public/task2-screen.jpg)
 
+---
+
+## 3. Task3-Asynchronous Data Fetching with AJAX 
+
+> [!NOTE]
+>
+> Requirements: 
+>
+> a) Create a UserProfile component that fetches user data from an API (for example, https://jsonplaceholder.typicode.com/users/1) and displays the user’s name, email, and address on the page. 
+>
+> b) Display a loading message while data is being fetched. 
 
 
-## 4. Git Hub Repo 
 
-Final git push for todolist app is pushed to the following github repo: 
+### 3.1 Explanation
 
-https://github.com/tbeehoon/todo-app/tree/main
+Two files are modified to complete the task:
+
+#### 3.1.1 `App.jsx` – The Main Application Component
+
+**App.jsx** is setup to "frame" the app, and import in **UserProfile** as a child component, 
+
+a. Import custom **UserProfile **
+
+```
+import UserProfile from './UserProfile'
+```
+
+b. Render **UserProfile** Component inside the styled card.
+
+```
+{/* UserProfile Component */}
+<div className="card" style={{ marginTop: 0 }}>
+	<UserProfile />
+</div>
+```
+
+
+
+#### 3.1.2 `UserProfile.jsx` – Fetching and Displaying User Data
+
+This component demonstrates how to fetch asynchronous data in React using the `useEffect` and `useState` hooks. It loads a fake user profile from the public API **`https://jsonplaceholder.typicode.com/users/1`** and displays the user’s information.
+
+##### a.  **State Management**
+
+The component manages three pieces of state:
+
+- **`user`** : holds the fetched user data (initially `null`).
+- **`loading`** : a boolean that tracks whether the fetch is in progress (initially `true`).
+- **`error`** : stores any error message if the fetch fails (initially `null`).
+
+```
+ const [user, setUser] = useState(null)
+ const [loading, setLoading] = useState(true)
+ const [error, setError] = useState(null)
+```
+
+##### b. **Data Fetching with `useEffect`**
+
+The `useEffect` hook triggers when the component mounts. The process:
+
+* Set `loading` to `true` before fetching.
+* Use `fetch` to call the API.
+* If the response is OK, convert it to JSON and update `user`.
+* If the response is invalid, throw an error.
+* Catch any errors, set `error`, and stop loading.
+
+```
+useEffect(() => {
+	setLoading(true)
+	fetch('https://jsonplaceholder.typicode.com/users/1')
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response was not ok')
+        return res.json()
+      })
+      .then((data) => {
+        setUser(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message)
+        setLoading(false)
+      })
+}, [])
+```
+
+![](./public/task3-1.jpg)
+
+
+
+##### c. **Conditional Rendering**
+
+The component displays different UI states based on the fetch status:
+
+- If `loading` then Show *“Loading user profile…”*
+- If `error` then Show the error message
+- if `!user` then Return null, meaning don't render anything for this component
+- If `user` is available then Render the profile details (refer to next section)
+
+```
+if (loading) return <div className="card">Loading user profile...</div>
+if (error) return <div className="card">Error: {error}</div>
+if (!user) return null
+```
+
+
+
+##### **d. Display User Data**
+
+Once the API returns data, the component displays the user’s **name**, **email**, and **full address** inside a styled card.
+
+```
+return (
+    <div className="card">
+      <h3>User Profile</h3>
+      <div><strong>Name:</strong> {user.name}</div>
+      <div><strong>Email:</strong> {user.email}</div>
+      <div>
+        <strong>Address:</strong> {user.address.street}, {user.address.suite}, {user.address.city}, {user.address.zipcode}
+      </div>
+    </div>
+  )
+```
+
+![](./public/task3-2)
+
+### 3.2 Code for UserProfile.jsx
+
+The full code for **UserProfile.jsx** is as follows:
+
+```
+import { useEffect, useState } from 'react'
+
+function UserProfile() {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    setLoading(true)
+    fetch('https://jsonplaceholder.typicode.com/users/1')
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response was not ok')
+        return res.json()
+      })
+      .then((data) => {
+        setUser(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) return <div className="card">Loading user profile...</div>
+  if (error) return <div className="card">Error: {error}</div>
+  if (!user) return null
+
+  return (
+    <div className="card">
+      <h3>User Profile</h3>
+      <div><strong>Name:</strong> {user.name}</div>
+      <div><strong>Email:</strong> {user.email}</div>
+      <div>
+        <strong>Address:</strong> {user.address.street}, {user.address.suite}, {user.address.city}, {user.address.zipcode}
+      </div>
+    </div>
+  )
+}
+
+export default UserProfile
+```
+
+![](./public/task3-3.jpg)
+
+### 3.3 Output
+
+Run the code:
+
+```
+npm run dev
+```
+
+The resulting browser screen is shown below:
+
+![](./public/task3-screen.jpg)
+
+
+
+## 4. Reference - Git Hub Repo 
+
+Final git push for module8part2 app is pushed to the following github repo: 
+
+https://github.com/tbeehoon/module8part2/tree/main
 
 
 
